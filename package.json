@@ -7,12 +7,14 @@
     "@testing-library/react": "^9.5.0",
     "@testing-library/user-event": "^7.2.1",
     "classnames": "^2.2.6",
+    "primeflex": "^2.0.0",
     "primeicons": "^4.0.0",
     "primereact": "^5.0.0-rc.2",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-scripts": "3.4.3",
     "react-transition-group": "^2.5.1",
+    "rxjs": "^6.6.3",
     "socket.io-client": "^2.3.0"
   },
   "scripts": {

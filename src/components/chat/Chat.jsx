@@ -3,17 +3,13 @@ import { Dialog } from 'primereact/dialog';
 import { InputText } from 'primereact/inputtext';
 import { Button } from 'primereact/button';
 import Mensagem from '../../modelos/Mensagem';
-import socketIOClient from "socket.io-client";
 
 import './chat.css';
 import geradorCores from '../../util/geradorCores';
+import ChatService from '../../servicos/ChatService';
 
-const ENDPOINT = "http://127.0.0.1:3001";
 
-let usuarioId = Math.floor(Math.random() * 4);
-
-let socket = socketIOClient(ENDPOINT);
-
+let chatService = new ChatService();
 
 
 export default function Chat(props) {
@@ -21,25 +17,26 @@ export default function Chat(props) {
     const [mensagens, setMensagens] = useState([]);
     const [mensagem, setMensagem] = useState(new Mensagem(""));
 
-    console.log("oi");
-
+    
     
 
     useEffect(() => {
-        console.log("Useeff");
-        console.log(mensagens);
-        socket.on("mensagemRecebida", data => {
-            
-            console.log("Recebeu mensagem");
-            setMensagens(mensagensAntigas=>[new Mensagem(data.mensagem, data.usuario), ...mensagensAntigas]);
-        });
+        
+            chatService.receberMensagem(function(data){
+                console.log("Chegou mensagem");
+                setMensagens(mensagensAntigas=>[new Mensagem(data.mensagem, data.usuario), ...mensagensAntigas]);
+            });
       }, []); //only re-run the effect if new message comes in
     
 
     function enviarMensagem(){
         //setMensagens(mensagens.concat(mensagem));
-        socket.emit("enviarMensagem", {usuario:usuarioId, mensagem:mensagem.texto});
-        setMensagem(new Mensagem(""));
+        console.log("Disparando mensagem");
+        chatService.enviarMensagem(mensagem).subscribe(resposta=>{
+            console.log("Disparou");
+            setMensagem(new Mensagem(""));
+        });
+        
     }
 
     function renderMensagens(){
